@@ -194,7 +194,7 @@ public class ManageCustomersFormController {
         /*Delete Customer*/
         String id = tblCustomers.getSelectionModel().getSelectedItem().getId();
         try {
-            if (customerDAO.existCustomer(id)) {
+            if (!customerDAO.existCustomer(id)) {
                 new Alert(Alert.AlertType.ERROR, "There is no such customer associated with the id " + id).show();
             }
 
