@@ -29,4 +29,13 @@ public class ItemDAOImpl {
         pstm.setInt(4, qtyOnHand);
         return pstm.executeUpdate() > 0;
     }
+    public boolean updateItem(String code, String description, int qtyOnHand, BigDecimal unitPrice) throws SQLException, ClassNotFoundException {
+        Connection connection = DBConnection.getDbConnection().getConnection();
+        PreparedStatement pstm = connection.prepareStatement("UPDATE Item SET description=?, unitPrice=?, qtyOnHand=? WHERE code=?");
+        pstm.setString(1, description);
+        pstm.setBigDecimal(2, unitPrice);
+        pstm.setInt(3, qtyOnHand);
+        pstm.setString(4, code);
+        return pstm.executeUpdate()>0;
+    }
 }
