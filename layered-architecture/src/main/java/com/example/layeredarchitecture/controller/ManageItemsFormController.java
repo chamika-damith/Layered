@@ -134,7 +134,7 @@ public class ManageItemsFormController {
         /*Delete Item*/
         String code = tblItems.getSelectionModel().getSelectedItem().getCode();
         try {
-            if (!existItem(code)) {
+            if (!itemDAO.existItem(code)) {
                 new Alert(Alert.AlertType.ERROR, "There is no such item associated with the id " + code).show();
             }
             boolean isDelete = itemDAO.deleteItems(code);
@@ -176,7 +176,7 @@ public class ManageItemsFormController {
 
         if (btnSave.getText().equalsIgnoreCase("save")) {
             try {
-                if (existItem(code)) {
+                if (itemDAO.existItem(code)) {
                     new Alert(Alert.AlertType.ERROR, code + " already exists").show();
                 }
                 //Save Item
@@ -194,7 +194,7 @@ public class ManageItemsFormController {
         } else {
             try {
 
-                if (!existItem(code)) {
+                if (!itemDAO.existItem(code)) {
                     new Alert(Alert.AlertType.ERROR, "There is no such item associated with the id " + code).show();
                 }
                 /*Update Item*/
@@ -216,14 +216,6 @@ public class ManageItemsFormController {
         }
 
         btnAddNewItem.fire();
-    }
-
-
-    private boolean existItem(String code) throws SQLException, ClassNotFoundException {
-        Connection connection = DBConnection.getDbConnection().getConnection();
-        PreparedStatement pstm = connection.prepareStatement("SELECT code FROM Item WHERE code=?");
-        pstm.setString(1, code);
-        return pstm.executeQuery().next();
     }
 
 
