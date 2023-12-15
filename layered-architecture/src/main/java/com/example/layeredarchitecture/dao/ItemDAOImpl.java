@@ -38,4 +38,10 @@ public class ItemDAOImpl {
         pstm.setString(4, code);
         return pstm.executeUpdate()>0;
     }
+    public boolean deleteItem(String code) throws SQLException, ClassNotFoundException {
+        Connection connection = DBConnection.getDbConnection().getConnection();
+        PreparedStatement pstm = connection.prepareStatement("DELETE FROM Item WHERE code=?");
+        pstm.setString(1, code);
+        return pstm.executeUpdate() >0;
+    }
 }
