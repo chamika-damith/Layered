@@ -14,8 +14,8 @@ import java.util.List;
 public class OrderDAOImpl implements OrderDAO {
 
     private ItemDAO itemDAO=new ItemDAOImpl();
-    private OrderDetailsDAO orderDetailsDAO=new OrderDetailsDAOImpl();
 
+    private OrderDetailsDAO orderDetailsDAO=new OrderDetailsDAOImpl();
     @Override
     public String generateNextNewOrderId() throws SQLException, ClassNotFoundException {
         Connection connection = DBConnection.getDbConnection().getConnection();
@@ -24,17 +24,6 @@ public class OrderDAOImpl implements OrderDAO {
 
         return rst.next() ? String.format("OID-%03d", (Integer.parseInt(rst.getString("oid").replace("OID-", "")) + 1)) : "OID-001";
     }
-
-    @Override
-    public ItemDTO findItem(String code) throws SQLException, ClassNotFoundException {
-        Connection connection = DBConnection.getDbConnection().getConnection();
-        PreparedStatement pstm = connection.prepareStatement("SELECT * FROM Item WHERE code=?");
-        pstm.setString(1, code);
-        ResultSet rst = pstm.executeQuery();
-        rst.next();
-        return new ItemDTO(code, rst.getString("description"), rst.getBigDecimal("unitPrice"), rst.getInt("qtyOnHand"));
-    }
-
     @Override
     public boolean saveOrder(String orderId, LocalDate orderDate, String customerId, List<OrderDetailDTO> orderDetails) throws SQLException, ClassNotFoundException {
         Connection connection = null;
@@ -70,7 +59,7 @@ public class OrderDAOImpl implements OrderDAO {
             }
 
             //Search & Update Item
-            ItemDTO item = findItem(detail.getItemCode());
+            ItemDTO item = itemDAO.findItems(detail.getItemCode());
             item.setQtyOnHand(item.getQtyOnHand() - detail.getQty());
 
             boolean isUpdateItem = itemDAO.updateItem(item.getCode(), item.getDescription(), item.getQtyOnHand(), item.getUnitPrice());
