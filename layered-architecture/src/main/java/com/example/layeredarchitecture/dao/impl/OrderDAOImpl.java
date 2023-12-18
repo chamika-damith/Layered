@@ -1,5 +1,7 @@
 package com.example.layeredarchitecture.dao.impl;
 
+import com.example.layeredarchitecture.dao.ItemDAO;
+import com.example.layeredarchitecture.dao.OrderDAO;
 import com.example.layeredarchitecture.db.DBConnection;
 import com.example.layeredarchitecture.model.ItemDTO;
 import com.example.layeredarchitecture.model.OrderDetailDTO;
@@ -8,7 +10,11 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.util.List;
 
-public class OrderDAOImpl {
+public class OrderDAOImpl implements OrderDAO {
+
+    private ItemDAO itemDAO=new ItemDAOImpl();
+
+    @Override
     public String generateNextNewOrderId() throws SQLException, ClassNotFoundException {
         Connection connection = DBConnection.getDbConnection().getConnection();
         Statement stm = connection.createStatement();
@@ -17,6 +23,7 @@ public class OrderDAOImpl {
         return rst.next() ? String.format("OID-%03d", (Integer.parseInt(rst.getString("oid").replace("OID-", "")) + 1)) : "OID-001";
     }
 
+    @Override
     public ItemDTO findItem(String code) throws SQLException, ClassNotFoundException {
         Connection connection = DBConnection.getDbConnection().getConnection();
         PreparedStatement pstm = connection.prepareStatement("SELECT * FROM Item WHERE code=?");
@@ -26,6 +33,7 @@ public class OrderDAOImpl {
         return new ItemDTO(code, rst.getString("description"), rst.getBigDecimal("unitPrice"), rst.getInt("qtyOnHand"));
     }
 
+    @Override
     public boolean saveOrder(String orderId, LocalDate orderDate, String customerId, List<OrderDetailDTO> orderDetails) throws SQLException, ClassNotFoundException {
         Connection connection = null;
 
@@ -67,13 +75,9 @@ public class OrderDAOImpl {
             ItemDTO item = findItem(detail.getItemCode());
             item.setQtyOnHand(item.getQtyOnHand() - detail.getQty());
 
-            PreparedStatement pstm = connection.prepareStatement("UPDATE Item SET description=?, unitPrice=?, qtyOnHand=? WHERE code=?");
-            pstm.setString(1, item.getDescription());
-            pstm.setBigDecimal(2, item.getUnitPrice());
-            pstm.setInt(3, item.getQtyOnHand());
-            pstm.setString(4, item.getCode());
+            boolean isUpdateItem = itemDAO.updateItem(item.getCode(), item.getDescription(), item.getQtyOnHand(), item.getUnitPrice());
 
-            if (!(pstm.executeUpdate() > 0)) {
+            if (!isUpdateItem) {
                 connection.rollback();
                 connection.setAutoCommit(true);
                 return false;
