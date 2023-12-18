@@ -2,6 +2,7 @@ package com.example.layeredarchitecture.dao.impl;
 
 import com.example.layeredarchitecture.dao.ItemDAO;
 import com.example.layeredarchitecture.dao.OrderDAO;
+import com.example.layeredarchitecture.dao.OrderDetailsDAO;
 import com.example.layeredarchitecture.db.DBConnection;
 import com.example.layeredarchitecture.model.ItemDTO;
 import com.example.layeredarchitecture.model.OrderDetailDTO;
@@ -13,6 +14,7 @@ import java.util.List;
 public class OrderDAOImpl implements OrderDAO {
 
     private ItemDAO itemDAO=new ItemDAOImpl();
+    private OrderDetailsDAO orderDetailsDAO=new OrderDetailsDAOImpl();
 
     @Override
     public String generateNextNewOrderId() throws SQLException, ClassNotFoundException {
@@ -57,15 +59,11 @@ public class OrderDAOImpl implements OrderDAO {
             return false;
         }
 
-        stm = connection.prepareStatement("INSERT INTO OrderDetails (oid, itemCode, unitPrice, qty) VALUES (?,?,?,?)");
 
         for (OrderDetailDTO detail : orderDetails) {
-            stm.setString(1, orderId);
-            stm.setString(2, detail.getItemCode());
-            stm.setBigDecimal(3, detail.getUnitPrice());
-            stm.setInt(4, detail.getQty());
+            boolean isSaveOrderDetail = orderDetailsDAO.saveOrderDetails(orderDetails, orderId);
 
-            if (stm.executeUpdate() != 1) {
+            if (!isSaveOrderDetail) {
                 connection.rollback();
                 connection.setAutoCommit(true);
                 return false;
