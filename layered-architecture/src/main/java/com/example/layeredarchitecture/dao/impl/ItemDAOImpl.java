@@ -41,8 +41,7 @@ public class ItemDAOImpl implements ItemDAO {
     }
     @Override
     public String generateNewId() throws SQLException, ClassNotFoundException {
-        Connection connection = DBConnection.getDbConnection().getConnection();
-        ResultSet rst = connection.createStatement().executeQuery("SELECT code FROM Item ORDER BY code DESC LIMIT 1;");
+        ResultSet rst = SQLutil.execute("SELECT code FROM Item ORDER BY code DESC LIMIT 1;");
         if (rst.next()) {
             String id = rst.getString("code");
             int newItemId = Integer.parseInt(id.replace("I00-", "")) + 1;
