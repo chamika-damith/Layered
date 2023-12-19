@@ -1,13 +1,10 @@
-package com.example.layeredarchitecture.dao.impl;
+package com.example.layeredarchitecture.dao.custom.impl;
 
-import com.example.layeredarchitecture.dao.ItemDAO;
+import com.example.layeredarchitecture.dao.custom.ItemDAO;
 import com.example.layeredarchitecture.dao.SQLutil;
-import com.example.layeredarchitecture.db.DBConnection;
 import com.example.layeredarchitecture.model.ItemDTO;
-import com.example.layeredarchitecture.view.tdm.ItemTM;
 
 import java.math.BigDecimal;
-import java.net.CacheRequest;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -28,7 +25,7 @@ public class ItemDAOImpl implements ItemDAO {
     }
     @Override
     public boolean updateItem(String code, String description, int qtyOnHand, BigDecimal unitPrice) throws SQLException, ClassNotFoundException {
-        return SQLutil.execute("UPDATE Item SET description=?, unitPrice=?, qtyOnHand=? WHERE code=?",code,description,qtyOnHand,unitPrice);
+        return SQLutil.execute("UPDATE Item SET description=?, unitPrice=?, qtyOnHand=? WHERE code=?",description,unitPrice,qtyOnHand,code);
     }
     @Override
     public boolean deleteItems(String code) throws SQLException, ClassNotFoundException {

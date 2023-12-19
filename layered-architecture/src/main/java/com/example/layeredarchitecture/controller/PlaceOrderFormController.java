@@ -1,12 +1,11 @@
 package com.example.layeredarchitecture.controller;
 
-import com.example.layeredarchitecture.dao.CustomerDAO;
-import com.example.layeredarchitecture.dao.ItemDAO;
-import com.example.layeredarchitecture.dao.OrderDAO;
-import com.example.layeredarchitecture.dao.impl.CustomerDAOImpl;
-import com.example.layeredarchitecture.dao.impl.ItemDAOImpl;
-import com.example.layeredarchitecture.dao.impl.OrderDAOImpl;
-import com.example.layeredarchitecture.db.DBConnection;
+import com.example.layeredarchitecture.dao.custom.CustomerDAO;
+import com.example.layeredarchitecture.dao.custom.ItemDAO;
+import com.example.layeredarchitecture.dao.custom.OrderDAO;
+import com.example.layeredarchitecture.dao.custom.impl.CustomerDAOImpl;
+import com.example.layeredarchitecture.dao.custom.impl.ItemDAOImpl;
+import com.example.layeredarchitecture.dao.custom.impl.OrderDAOImpl;
 import com.example.layeredarchitecture.model.CustomerDTO;
 import com.example.layeredarchitecture.model.ItemDTO;
 import com.example.layeredarchitecture.model.OrderDetailDTO;
@@ -105,7 +104,7 @@ public class PlaceOrderFormController {
                     /*Search Customer*/
 
                     try {
-                        if (!customerDAO.existCustomer(newValue + "")) {
+                        if (!customerDAO.exist(newValue + "")) {
 //                            "There is no such customer associated with the id " + id
                             new Alert(Alert.AlertType.ERROR, "There is no such customer associated with the id " + newValue + "").show();
                         }
@@ -195,7 +194,7 @@ public class PlaceOrderFormController {
 
     private void loadAllCustomerIds() {
         try {
-            ArrayList<CustomerDTO> allCustomer = customerDAO.getAllCustomer();
+            ArrayList<CustomerDTO> allCustomer = customerDAO.getAll();
             for (CustomerDTO dto: allCustomer) {
                 cmbCustomerId.getItems().add(dto.getId());
             }
