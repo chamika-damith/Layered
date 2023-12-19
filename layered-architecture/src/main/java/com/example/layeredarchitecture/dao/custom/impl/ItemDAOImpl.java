@@ -10,16 +10,6 @@ import java.util.ArrayList;
 
 public class ItemDAOImpl implements ItemDAO {
     @Override
-    public ArrayList<ItemDTO> allItems() throws SQLException, ClassNotFoundException {
-        ResultSet rst = SQLutil.execute("SELECT * FROM Item");
-        ArrayList<ItemDTO> itemDTOS=new ArrayList<>();
-        while (rst.next()) {
-            ItemDTO itemDTO=new ItemDTO(rst.getString("code"), rst.getString("description"), rst.getBigDecimal("unitPrice"), rst.getInt("qtyOnHand"));
-            itemDTOS.add(itemDTO);
-        }
-        return itemDTOS;
-    }
-    @Override
     public boolean saveItem(String code, String description, int qtyOnHand, BigDecimal unitPrice) throws SQLException, ClassNotFoundException {
         return SQLutil.execute("INSERT INTO Item (code, description, unitPrice, qtyOnHand) VALUES (?,?,?,?)",code,description,qtyOnHand,unitPrice);
     }
@@ -53,5 +43,37 @@ public class ItemDAOImpl implements ItemDAO {
         rst.next();
         ItemDTO item = new ItemDTO(newItemCode + "", rst.getString("description"), rst.getBigDecimal("unitPrice"), rst.getInt("qtyOnHand"));
         return item;
+    }
+
+    @Override
+    public ArrayList<ItemDTO> getAll() throws SQLException, ClassNotFoundException {
+        ResultSet rst = SQLutil.execute("SELECT * FROM Item");
+        ArrayList<ItemDTO> itemDTOS=new ArrayList<>();
+        while (rst.next()) {
+            ItemDTO itemDTO=new ItemDTO(rst.getString("code"), rst.getString("description"), rst.getBigDecimal("unitPrice"), rst.getInt("qtyOnHand"));
+            itemDTOS.add(itemDTO);
+        }
+        return itemDTOS;
+    }
+
+    @Override
+    public boolean save(ItemDTO dto) throws SQLException, ClassNotFoundException {
+        return SQLutil.execute("INSERT INTO Item (code, description, unitPrice, qtyOnHand) VALUES (?,?,?,?)",dto.getCode(),dto.getDescription(),dto.getQtyOnHand(),dto.getUnitPrice());
+
+    }
+
+    @Override
+    public boolean update(ItemDTO dto) throws SQLException, ClassNotFoundException {
+        return false;
+    }
+
+    @Override
+    public boolean exist(String id) throws SQLException, ClassNotFoundException {
+        return false;
+    }
+
+    @Override
+    public boolean delete(String id) throws SQLException, ClassNotFoundException {
+        return false;
     }
 }

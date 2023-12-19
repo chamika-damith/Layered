@@ -6,8 +6,7 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public interface ItemDAO {
-    ArrayList<ItemDTO> allItems() throws SQLException, ClassNotFoundException;
+public interface ItemDAO extends CrudDAO<ItemDTO>{
     boolean saveItem(String code, String description, int qtyOnHand, BigDecimal unitPrice) throws SQLException, ClassNotFoundException;
     boolean updateItem(String code, String description, int qtyOnHand, BigDecimal unitPrice) throws SQLException, ClassNotFoundException;
     boolean deleteItems(String code) throws SQLException, ClassNotFoundException;

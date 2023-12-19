@@ -72,7 +72,7 @@ public class ManageItemsFormController {
         tblItems.getItems().clear();
         try {
             /*Get all items*/
-            ArrayList<ItemDTO> itemDTOS = itemDAO.allItems();
+            ArrayList<ItemDTO> itemDTOS = itemDAO.getAll();
             for (ItemDTO item: itemDTOS) {
                 tblItems.getItems().add(
                         new ItemTM(item.getCode(),
@@ -180,7 +180,7 @@ public class ManageItemsFormController {
                     new Alert(Alert.AlertType.ERROR, code + " already exists").show();
                 }
                 //Save Item
-                boolean isSaved = itemDAO.saveItem(code, description, qtyOnHand, unitPrice);
+                boolean isSaved = itemDAO.save(new ItemDTO(code, description, unitPrice,qtyOnHand));
                 if (isSaved){
                     tblItems.getItems().add(new ItemTM(code, description, unitPrice, qtyOnHand));
                 }else {
