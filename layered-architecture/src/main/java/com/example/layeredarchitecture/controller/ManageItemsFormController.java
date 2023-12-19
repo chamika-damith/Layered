@@ -198,7 +198,7 @@ public class ManageItemsFormController {
                     new Alert(Alert.AlertType.ERROR, "There is no such item associated with the id " + code).show();
                 }
                 /*Update Item*/
-                boolean isUpdate = itemDAO.updateItem(code, description, qtyOnHand, unitPrice);
+                boolean isUpdate = itemDAO.update(new ItemDTO(code, description, unitPrice,qtyOnHand));
                 if (isUpdate){
                     ItemTM selectedItem = tblItems.getSelectionModel().getSelectedItem();
                     selectedItem.setDescription(description);

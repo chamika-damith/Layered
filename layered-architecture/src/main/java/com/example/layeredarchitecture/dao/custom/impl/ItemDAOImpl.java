@@ -10,14 +10,6 @@ import java.util.ArrayList;
 
 public class ItemDAOImpl implements ItemDAO {
     @Override
-    public boolean saveItem(String code, String description, int qtyOnHand, BigDecimal unitPrice) throws SQLException, ClassNotFoundException {
-        return SQLutil.execute("INSERT INTO Item (code, description, unitPrice, qtyOnHand) VALUES (?,?,?,?)",code,description,qtyOnHand,unitPrice);
-    }
-    @Override
-    public boolean updateItem(String code, String description, int qtyOnHand, BigDecimal unitPrice) throws SQLException, ClassNotFoundException {
-        return SQLutil.execute("UPDATE Item SET description=?, unitPrice=?, qtyOnHand=? WHERE code=?",description,unitPrice,qtyOnHand,code);
-    }
-    @Override
     public boolean deleteItems(String code) throws SQLException, ClassNotFoundException {
         return SQLutil.execute("DELETE FROM Item WHERE code=?",code);
     }
@@ -64,7 +56,8 @@ public class ItemDAOImpl implements ItemDAO {
 
     @Override
     public boolean update(ItemDTO dto) throws SQLException, ClassNotFoundException {
-        return false;
+        return SQLutil.execute("UPDATE Item SET description=?, unitPrice=?, qtyOnHand=? WHERE code=?",dto.getDescription(),dto.getUnitPrice(),dto.getQtyOnHand(),dto.getCode());
+
     }
 
     @Override
