@@ -7,6 +7,7 @@ import com.example.layeredarchitecture.model.ItemDTO;
 import com.example.layeredarchitecture.view.tdm.ItemTM;
 
 import java.math.BigDecimal;
+import java.net.CacheRequest;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -31,10 +32,7 @@ public class ItemDAOImpl implements ItemDAO {
     }
     @Override
     public boolean deleteItems(String code) throws SQLException, ClassNotFoundException {
-        Connection connection = DBConnection.getDbConnection().getConnection();
-        PreparedStatement pstm = connection.prepareStatement("DELETE FROM Item WHERE code=?");
-        pstm.setString(1, code);
-        return pstm.executeUpdate() >0;
+        return SQLutil.execute("DELETE FROM Item WHERE code=?",code);
     }
     @Override
     public boolean existItem(String code) throws SQLException, ClassNotFoundException {
