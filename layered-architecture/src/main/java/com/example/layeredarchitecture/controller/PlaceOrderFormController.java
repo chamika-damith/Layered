@@ -133,7 +133,7 @@ public class PlaceOrderFormController {
 
                 /*Find Item*/
                 try {
-                    if (!itemDAO.existItem(newItemCode + "")) {
+                    if (!itemDAO.exist(newItemCode + "")) {
 //                        throw new NotFoundException("There is no such item associated with the id " + code);
                     }
 

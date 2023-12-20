@@ -9,15 +9,7 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class ItemDAOImpl implements ItemDAO {
-    @Override
-    public boolean deleteItems(String code) throws SQLException, ClassNotFoundException {
-        return SQLutil.execute("DELETE FROM Item WHERE code=?",code);
-    }
-    @Override
-    public boolean existItem(String code) throws SQLException, ClassNotFoundException {
-        ResultSet rst=SQLutil.execute("SELECT code FROM Item WHERE code=?",code);
-        return rst.next();
-    }
+
     @Override
     public String generateNewId() throws SQLException, ClassNotFoundException {
         ResultSet rst = SQLutil.execute("SELECT code FROM Item ORDER BY code DESC LIMIT 1;");
@@ -57,16 +49,16 @@ public class ItemDAOImpl implements ItemDAO {
     @Override
     public boolean update(ItemDTO dto) throws SQLException, ClassNotFoundException {
         return SQLutil.execute("UPDATE Item SET description=?, unitPrice=?, qtyOnHand=? WHERE code=?",dto.getDescription(),dto.getUnitPrice(),dto.getQtyOnHand(),dto.getCode());
-
     }
 
     @Override
     public boolean exist(String id) throws SQLException, ClassNotFoundException {
-        return false;
+        ResultSet rst=SQLutil.execute("SELECT code FROM Item WHERE code=?",id);
+        return rst.next();
     }
 
     @Override
     public boolean delete(String id) throws SQLException, ClassNotFoundException {
-        return false;
+        return SQLutil.execute("DELETE FROM Item WHERE code=?",id);
     }
 }

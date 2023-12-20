@@ -134,10 +134,10 @@ public class ManageItemsFormController {
         /*Delete Item*/
         String code = tblItems.getSelectionModel().getSelectedItem().getCode();
         try {
-            if (!itemDAO.existItem(code)) {
+            if (!itemDAO.exist(code)) {
                 new Alert(Alert.AlertType.ERROR, "There is no such item associated with the id " + code).show();
             }
-            boolean isDelete = itemDAO.deleteItems(code);
+            boolean isDelete = itemDAO.delete(code);
             if (isDelete){
                 tblItems.getItems().remove(tblItems.getSelectionModel().getSelectedItem());
                 tblItems.getSelectionModel().clearSelection();
@@ -176,7 +176,7 @@ public class ManageItemsFormController {
 
         if (btnSave.getText().equalsIgnoreCase("save")) {
             try {
-                if (itemDAO.existItem(code)) {
+                if (itemDAO.exist(code)) {
                     new Alert(Alert.AlertType.ERROR, code + " already exists").show();
                 }
                 //Save Item
@@ -194,7 +194,7 @@ public class ManageItemsFormController {
         } else {
             try {
 
-                if (!itemDAO.existItem(code)) {
+                if (!itemDAO.exist(code)) {
                     new Alert(Alert.AlertType.ERROR, "There is no such item associated with the id " + code).show();
                 }
                 /*Update Item*/
