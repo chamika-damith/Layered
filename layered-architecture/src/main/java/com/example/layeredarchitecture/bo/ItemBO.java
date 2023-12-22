@@ -11,4 +11,12 @@ public interface ItemBO {
     ArrayList<ItemDTO> getAllItems() throws SQLException, ClassNotFoundException;
 
     ItemDTO findItem(String code);
+
+    boolean deleteItem(String id) throws SQLException, ClassNotFoundException;
+
+    String generateNewId();
+
+    boolean save(ItemDTO dto) throws SQLException, ClassNotFoundException;
+
+    boolean update(ItemDTO dto) throws SQLException, ClassNotFoundException;
 }
