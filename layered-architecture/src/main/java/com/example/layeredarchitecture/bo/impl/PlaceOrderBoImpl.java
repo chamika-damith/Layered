@@ -1,11 +1,14 @@
 package com.example.layeredarchitecture.bo.impl;
 
+import com.example.layeredarchitecture.bo.BOFactory;
 import com.example.layeredarchitecture.bo.CustomerBO;
 import com.example.layeredarchitecture.bo.ItemBO;
 import com.example.layeredarchitecture.bo.PlaceOrderBO;
+import com.example.layeredarchitecture.dao.DAOFactory;
 import com.example.layeredarchitecture.dao.custom.ItemDAO;
 import com.example.layeredarchitecture.dao.custom.OrderDAO;
 import com.example.layeredarchitecture.dao.custom.OrderDetailsDAO;
+import com.example.layeredarchitecture.dao.custom.impl.CustomerDAOImpl;
 import com.example.layeredarchitecture.dao.custom.impl.ItemDAOImpl;
 import com.example.layeredarchitecture.dao.custom.impl.OrderDAOImpl;
 import com.example.layeredarchitecture.dao.custom.impl.OrderDetailsDAOImpl;
@@ -21,11 +24,10 @@ import java.util.List;
 
 public class PlaceOrderBoImpl implements PlaceOrderBO {
 
-    private OrderDetailsDAO orderDetailsDAO=new OrderDetailsDAOImpl();
-    private CustomerBO customerBO = new CustomerBOImpl();
-    private ItemBO itemBO=new ItemBOImpl();
-    private OrderDAO orderDAO=new OrderDAOImpl();
-    private ItemDAO itemDAO=new ItemDAOImpl();
+    private OrderDetailsDAO orderDetailsDAO= (OrderDetailsDAOImpl) DAOFactory.getFactory().getDao(DAOFactory.DADTypes.ORDERDETAIL);
+    private CustomerBO customerBO = (CustomerBO) BOFactory.getFactory().getBO(BOFactory.BOTypes.CUSTOMER);
+    private ItemBO itemBO= (ItemBO) BOFactory.getFactory().getBO(BOFactory.BOTypes.ITEM);
+    private OrderDAO orderDAO= (OrderDAOImpl) DAOFactory.getFactory().getDao(DAOFactory.DADTypes.ORDER);
 
     @Override
     public boolean placeOrder(String orderId, LocalDate orderDate, String customerId, List<OrderDetailDTO> orderDetails) throws SQLException, ClassNotFoundException {
@@ -62,10 +64,10 @@ public class PlaceOrderBoImpl implements PlaceOrderBO {
             }
 
             //Search & Update Item
-            ItemDTO item = itemDAO.findItems(detail.getItemCode());
+            ItemDTO item = itemBO.findItem(detail.getItemCode());
             item.setQtyOnHand(item.getQtyOnHand() - detail.getQty());
 
-            boolean isUpdateItem = itemDAO.update(new ItemDTO(item.getCode(), item.getDescription(), item.getUnitPrice(),item.getQtyOnHand()));
+            boolean isUpdateItem = itemBO.update(new ItemDTO(item.getCode(), item.getDescription(), item.getUnitPrice(),item.getQtyOnHand()));
 
             if (!isUpdateItem) {
                 connection.rollback();
