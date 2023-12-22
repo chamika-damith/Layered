@@ -21,12 +21,10 @@ import java.util.List;
 public class PlaceOrderBoImpl implements PlaceOrderBO{
 
     private OrderDetailsDAO orderDetailsDAO=new OrderDetailsDAOImpl();
-
-    private CustomerDAOImpl customerDAO=new CustomerDAOImpl();
-
-    private ItemDAO itemDAO=new ItemDAOImpl();
-
+    private CustomerBO customerBO = new CustomerBOImpl();
+    private ItemBO itemBO=new ItemBOImpl();
     private OrderDAO orderDAO=new OrderDAOImpl();
+    private ItemDAO itemDAO=new ItemDAOImpl();
 
     @Override
     public boolean placeOrder(String orderId, LocalDate orderDate, String customerId, List<OrderDetailDTO> orderDetails) throws SQLException, ClassNotFoundException {
@@ -81,38 +79,31 @@ public class PlaceOrderBoImpl implements PlaceOrderBO{
 
     @Override
     public ItemDTO findItem(String code) {
-        try {
-            return itemDAO.findItems(code);
-        } catch (SQLException e) {
-            throw new RuntimeException("Failed to find the Item " + code, e);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return itemBO.findItem(code);
     }
 
     @Override
     public String SearchCustomer(String newValue) throws SQLException, ClassNotFoundException {
-        return customerDAO.SearchCustomer(newValue);
+        return customerBO.SearchCustomer(newValue);
     }
 
     @Override
     public boolean existCustomer(String id) throws SQLException, ClassNotFoundException {
-        return customerDAO.exist(id);
+        return customerBO.existCustomer(id);
     }
 
     @Override
     public ArrayList<CustomerDTO> getAllCustomers() throws SQLException, ClassNotFoundException {
-        return customerDAO.getAll();
+        return customerBO.getAllCustomers();
     }
 
     @Override
     public boolean existItem(String id) throws SQLException, ClassNotFoundException {
-        return itemDAO.exist(id);
+        return itemBO.existItem(id);
     }
 
     public ArrayList<ItemDTO> getAllItems() throws SQLException, ClassNotFoundException {
-        return itemDAO.getAll();
+        return itemBO.getAllItems();
     }
 
     @Override

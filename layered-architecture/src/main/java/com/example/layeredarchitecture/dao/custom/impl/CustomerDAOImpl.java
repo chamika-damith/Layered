@@ -8,8 +8,6 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class CustomerDAOImpl implements CustomerDAO {
-
-
     @Override
     public String generateCusNewId() throws SQLException, ClassNotFoundException {
         ResultSet rst = SQLutil.execute("SELECT id FROM Customer ORDER BY id DESC LIMIT 1;");
